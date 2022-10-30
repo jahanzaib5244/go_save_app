@@ -1,0 +1,5 @@
+export { default as Home } from './home/Home'
+export { default as Login } from './login/Login'
+export { default as Signup } from './signup/Signup'
+export { default as ForgetPassword } from './forget_password/ForgetPassword'
+export { default as Splash } from './splash/Splash'
