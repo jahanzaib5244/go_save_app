@@ -12,11 +12,42 @@ export const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   detail_container: {
-    flex: 0.3,
+    flex: 0.35,
     alignItems: 'center',
     justifyContent: 'center',
   },
   input_container: {
     flex: 0.7,
+    justifyContent: 'space-between',
+  },
+  emptyContainer: {
+    height: 10,
+  },
+  btn: {
+    marginTop: 40,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: Colors.theme,
+    top: 5,
+  },
+  registerTxt: {
+    color: Colors.black,
+    fontSize: 14,
+  },
+  registerContaier: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    marginBottom: 15,
+  },
+  signup: {
+    color: Colors.theme,
+    fontWeight: '700',
+  },
+  forgetPassword: {
+    alignSelf: 'flex-end',
+    marginRight: '5%',
+    marginTop: 10,
   },
 })

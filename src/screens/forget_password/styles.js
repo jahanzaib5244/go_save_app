@@ -17,9 +17,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   input_container: {
-    flex: 1,
+    flex: 0.7,
     justifyContent: 'space-between',
-    paddingTop: 40,
   },
   emptyContainer: {
     height: 10,
@@ -47,12 +46,7 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
   },
   forgetPassword: {
-    alignSelf: 'flex-end',
-    marginRight: '5%',
-    marginTop: 10,
-  },
-  error: {
-    color: Colors.error,
-    paddingHorizontal: '6%',
+    marginLeft: '7%',
+    marginVertical: 20,
   },
 })

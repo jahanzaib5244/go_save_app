@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "457856029462",
+    "project_id": "gosave-50d38",
+    "storage_bucket": "gosave-50d38.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457856029462:android:d7ece635100d9eddd63637",
+        "android_client_info": {
+          "package_name": "com.go_save_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "457856029462-t27qeqt8ncpvkqg06bgju2o5tbopgtvb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVhQCa6Do1Xr65Tuq-QRUn7yeoo1GBWyk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "457856029462-t27qeqt8ncpvkqg06bgju2o5tbopgtvb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -17,6 +17,8 @@ export const Colors = {
   primary: '#E14032',
   success: '#28a745',
   error: '#dc3545',
+  black: 'rgba(0,0,0,0.9)',
+  theme: 'rgba(40,90,119,1)',
 }
 
 export const NavigationColors = {
