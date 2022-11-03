@@ -36,17 +36,19 @@ const Signup = ({ navigation, route }) => {
         email,
         password,
       )
-      console.log(create, 'crested')
-      const res = await firestore().collection('users').add({
-        first_name: firstName,
-        last_name: lastName,
-        type,
-        cnic: cnic,
-        dob: '',
-        email,
-        pic: '',
-        disabled: false,
-      })
+      const res = await firestore()
+        .collection('users')
+        .doc(create.user.uid)
+        .set({
+          first_name: firstName,
+          last_name: lastName,
+          type,
+          cnic: cnic,
+          dob: '',
+          email,
+          pic: '',
+          disabled: false,
+        })
       console.log(res)
       setloading(false)
     } catch (error) {

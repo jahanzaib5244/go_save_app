@@ -8,4 +8,6 @@ export default {
   driver: require('@/Assets/Images/driver.png'),
   user: require('@/Assets/Images/user.png'),
   id: require('@/Assets/Images/id-card.png'),
+  logout: require('@/Assets/Images/logout.png'),
+  home: require('@/Assets/Images/home.png'),
 }

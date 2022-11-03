@@ -5,10 +5,13 @@ import { LOGIN, LOGOUT, USERDATA } from '../states'
 export const getUserData = () => async dispatch => {
   try {
     const uid = auth().currentUser.uid
+    console.log(uid)
     firestore()
       .collection('users')
       .doc(uid)
       .onSnapshot(async snapshot => {
+        snapshot.data()
+        console.log(snapshot.data())
         if (snapshot.data()) {
           dispatch({
             type: USERDATA,
@@ -22,17 +25,17 @@ export const getUserData = () => async dispatch => {
   }
 }
 
-// export const logoutFireStore = tokens => async dispatch => {
-//   try {
-//     await auth().signOut()
-//     dispatch({
-//       type: LOGOUT,
-//       payload: {},
-//     })
-//   } catch (error) {
-//     console.log('logout action error', error)
-//   }
-// }
+export const logoutFireStore = tokens => async dispatch => {
+  try {
+    await auth().signOut()
+    dispatch({
+      type: LOGOUT,
+      payload: {},
+    })
+  } catch (error) {
+    console.log('logout action error', error)
+  }
+}
 
 // export const updateProfileFirestore =
 //   (

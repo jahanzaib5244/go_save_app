@@ -1,93 +1,56 @@
 import React from 'react'
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import { Avatar, Title, Caption, Text } from 'react-native-paper'
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer'
 import { useSelector, useDispatch } from 'react-redux'
-import Progress from 'react-native-progress/Pie'
-import PImage from 'react-native-image-progress'
 
-import { Colors } from '../config/Utils'
-import { dologout } from '../Store/actions/AuthActions'
-import strings from '../constants/language/LocalizedString'
+import { Images } from '../Theme'
+import { Colors } from '../Theme/Variables'
+import { logoutFireStore } from '../Store/actions/auth.action'
+
 export default function Drawercontent(props) {
   const userdata = useSelector(state => state.AuthReducer.userData)
 
   const dispatch = useDispatch()
   const ctaLogout = () => {
-    dispatch(dologout())
+    dispatch(logoutFireStore())
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.white }}>
+    <View style={styles.main_containner}>
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
-            <View
-              style={{
-                alignSelf: 'center',
-                height: 80,
-                width: 80,
-                borderRadius: 80 / 2,
-                overflow: 'hidden',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'white',
-                elevation: 8,
-              }}
-            >
-              <PImage
-                source={{ uri: userdata?.ProfilePic }}
-                indicator={Progress}
-                style={{ height: 80, width: 80 }}
-                indicatorProps={{
-                  size: 60,
-                  borderWidth: 1,
-                  color: 'rgba(256, 256, 256, 1)',
-                  unfilledColor: 'rgba(150, 150, 150, 0.2)',
-                }}
+            <View style={styles.image_containner}>
+              <Image
+                source={
+                  userdata?.ProfilePic
+                    ? { uri: userdata?.ProfilePic }
+                    : Images.avatar
+                }
+                style={styles.userImage}
               />
             </View>
-            <Title numberOfLines={1} style={styles.title}>
-              {userdata?.FirstName}
-            </Title>
-            <Caption numberOfLines={1} style={styles.caption}>
-              {userdata?.Email}
-            </Caption>
-            <View
-              style={{
-                borderWidth: 0.6,
-                marginTop: 10,
-                marginHorizontal: 20,
-                borderColor: '#ccc',
-              }}
-            />
+            <Text numberOfLines={1} style={styles.title}>
+              {userdata?.first_name}
+            </Text>
+            <Text numberOfLines={1} style={styles.caption}>
+              {userdata?.email}
+            </Text>
+            <View style={styles.border} />
           </View>
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
 
       <View>
-        <View style={{ padding: 20 }}>
-          <TouchableOpacity onPress={ctaLogout} style={{ paddingVertical: 15 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Image
-                style={{ width: 22, height: 22, tintColor: Colors.black }}
-                source={require('../assets/logout.png')}
-              />
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontFamily: 'Roboto-Medium',
-                  marginLeft: 10,
-                  color: Colors.black,
-                  textAlign: 'left',
-                }}
-              >
-                {strings.signout}
-              </Text>
+        <View style={styles.looutButton}>
+          <TouchableOpacity onPress={ctaLogout} style={styles.paddinngVertical}>
+            <View style={styles.logoutContainer}>
+              <Image style={styles.logoutImage} source={Images.logout} />
+              <Text style={styles.logoutText}>Logout</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -106,6 +69,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     marginBottom: 10,
   },
+  image_containner: {
+    alignSelf: 'center',
+    height: 80,
+    width: 80,
+    borderRadius: 80 / 2,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    elevation: 8,
+  },
   title: {
     fontSize: 16,
     marginTop: 3,
@@ -122,10 +96,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     alignSelf: 'center',
   },
+  border: {
+    borderWidth: 0.6,
+    marginTop: 10,
+    marginHorizontal: 20,
+    borderColor: '#ccc',
+  },
   row: {
     marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  logoutText: {
+    fontSize: 15,
+    marginLeft: 10,
+    color: Colors.black,
+    textAlign: 'left',
   },
   section: {
     flexDirection: 'row',
@@ -141,6 +127,30 @@ const styles = StyleSheet.create({
     borderColor: Colors.lightBlack,
     marginTop: 15,
     backgroundColor: Colors.primary,
+  },
+  logoutImage: {
+    width: 22,
+    height: 22,
+    tintColor: Colors.black,
+  },
+  main_containner: {
+    flex: 1,
+    backgroundColor: Colors.white,
+  },
+  logoutContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  paddinngVertical: {
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+  },
+  userImage: {
+    height: 80,
+    width: 80,
+  },
+  looutButton: {
+    paddingVertical: 20,
   },
   bottomDrawerSection: {
     marginBottom: 15,
