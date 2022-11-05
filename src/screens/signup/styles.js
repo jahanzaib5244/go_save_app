@@ -21,6 +21,11 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 40,
   },
+  dropdown: {
+    marginHorizontal: '6%',
+    marginVertical: 10,
+    width: '87%',
+  },
   emptyContainer: {
     height: 10,
   },

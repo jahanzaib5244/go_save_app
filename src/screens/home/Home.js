@@ -35,8 +35,8 @@ const Home = () => {
         provider={PROVIDER_GOOGLE}
         style={StyleSheet.absoluteFill}
         region={{
-          latitude: userdata?.lat,
-          longitude: userdata?.lon,
+          latitude: 31.5204,
+          longitude: 74.3587,
           latitudeDelta: 0.075,
           longitudeDelta: 0.0121,
         }}

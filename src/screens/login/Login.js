@@ -9,6 +9,7 @@ import NavStrings from '../../Containers/NavStrings'
 
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import auth from '@react-native-firebase/auth'
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email().required(),
@@ -16,8 +17,14 @@ const validationSchema = Yup.object().shape({
 })
 
 const Login = ({ navigation }) => {
-  const handelLogin = values => {
-    console.log(values)
+  const handelLogin = async values => {
+    const { email, password } = values
+    try {
+      const res = await auth().signInWithEmailAndPassword(email, password)
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
