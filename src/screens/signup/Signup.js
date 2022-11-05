@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, PermissionsAndroid } from 'react-native'
 import React, { useState } from 'react'
 import { styles } from './styles'
 import Images from '../../Theme/Images'
@@ -10,6 +10,9 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
+import DropDownPicker from 'react-native-dropdown-picker'
+import GetLocation from 'react-native-get-location'
+import { check, PERMISSIONS, RESULTS } from 'react-native-permissions'
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required().label('First Name'),
@@ -24,33 +27,118 @@ const validationSchema = Yup.object().shape({
 })
 
 const Signup = ({ navigation, route }) => {
+  const permission_check = async (status = false) => {
+    const result = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+
+    switch (result) {
+      case RESULTS.UNAVAILABLE:
+        status = false
+        console.log(
+          'This feature is not available (on this device / in this context)',
+        )
+        break
+      case RESULTS.DENIED:
+        status = false
+
+        console.log(
+          'The permission has not been requested / is denied but requestable',
+        )
+        break
+      case RESULTS.LIMITED:
+        status = false
+
+        console.log('The permission is limited: some actions are possible')
+        break
+      case RESULTS.GRANTED:
+        status = true
+        console.log('The permission is granted')
+        break
+      case RESULTS.BLOCKED:
+        status = false
+
+        console.log('The permission is denied and not requestable anymore')
+        break
+    }
+  }
+
   const [dbError, setdbError] = useState('')
   const [loading, setloading] = useState(false)
+
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState(null)
+  const [lat, setlat] = useState(null)
+  const [lon, setlon] = useState(null)
+  const [items, setItems] = useState([
+    { label: 'Chippa', value: 'Chippa' },
+    { label: 'Amaan', value: 'Amaan' },
+    { label: 'Edhi', value: 'Edhi' },
+  ])
+
+  const gettigLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        setlat(location.latitude)
+        setlon(location.longitude)
+      })
+      .catch(error => {
+        const { code, message } = error
+        console.warn(code, message)
+      })
+  }
+
+  const requestLocatio = () => {
+    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(result => {
+      permission_check()
+    })
+  }
+
+  const getLocationFunn = async () => {
+    const checked = await check()
+    if (checked) {
+      gettigLocation()
+    } else {
+    }
+  }
+
+  useEffect(() => {
+    getLocationFunn()
+  }, [])
+
   const type = route.params?.register
   const handelSingup = async values => {
     setloading(true)
     const { firstName, lastName, cnic, email, password } = values
+
     try {
       setdbError('')
-      const create = await auth().createUserWithEmailAndPassword(
-        email,
-        password,
-      )
-      const res = await firestore()
-        .collection('users')
-        .doc(create.user.uid)
-        .set({
-          first_name: firstName,
-          last_name: lastName,
-          type,
-          cnic: cnic,
-          dob: '',
+
+      if (value && type === 'driver' && lat && lon) {
+        const create = await auth().createUserWithEmailAndPassword(
           email,
-          pic: '',
-          disabled: false,
-        })
-      console.log(res)
-      setloading(false)
+          password,
+        )
+        const res = await firestore()
+          .collection('users')
+          .doc(create.user.uid)
+          .set({
+            first_name: firstName,
+            last_name: lastName,
+            type,
+            cnic: cnic,
+            dob: '',
+            email,
+            pic: '',
+            disabled: false,
+          })
+        console.log(res)
+        setloading(false)
+      } else {
+        setloading(false)
+        setdbError('please select an ambulance')
+      }
     } catch (error) {
       console.log(error)
       setloading(false)
@@ -61,6 +149,18 @@ const Signup = ({ navigation, route }) => {
     <View style={styles.root}>
       <View style={styles.input_container}>
         <View>
+          {type === 'driver' && (
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              style={styles.dropdown}
+              placeholder="Select an Ambulance..."
+            />
+          )}
           <Formik
             initialValues={{
               firstName: '',
