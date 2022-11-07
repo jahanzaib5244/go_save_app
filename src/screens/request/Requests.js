@@ -19,7 +19,7 @@ const Requests = () => {
   }, [dispatch])
 
   useEffect(() => {
-    const uid = auth().currentUser.uid
+    const uid = auth().currentUser?.uid
     if (userdata?.type === 'user') {
       setrequests(
         all_requests.filter(item => {

@@ -1766,6 +1766,11 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
+"@supersami/rn-foreground-service@^1.1.1":
+  "integrity" "sha512-aSpH4Obpv8FNfbpMbQZwUM00f2Gd2p5DlCBXlUg0qvx2Fon/cK+sy7YfHr4ktCGbudItEhaeV3AN/EmI8Cv+Kg=="
+  "resolved" "https://registry.npmjs.org/@supersami/rn-foreground-service/-/rn-foreground-service-1.1.1.tgz"
+  "version" "1.1.1"
+
 "@tootallnate/once@1":
   "integrity" "sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw=="
   "resolved" "https://registry.npmjs.org/@tootallnate/once/-/once-1.1.2.tgz"
@@ -6395,7 +6400,7 @@
     "react-freeze" "^1.0.0"
     "warn-once" "^0.1.0"
 
-"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.70 || 1000.0.0", "react-native@>= 0.64.3", "react-native@>=0.57", "react-native@>=0.60", "react-native@>=0.63.0", "react-native@>=0.63.3", "react-native@>0.62.0", "react-native@0.70.4":
+"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.70 || 1000.0.0", "react-native@>= 0.64.3", "react-native@>=0.57", "react-native@>=0.59.0", "react-native@>=0.60", "react-native@>=0.63.0", "react-native@>=0.63.3", "react-native@>0.62.0", "react-native@0.70.4":
   "integrity" "sha512-1e4jWotS20AJ/4lGVkZQs2wE0PvCpIRmPQEQ1FyH7wdyuewFFIxbUHqy6vAj1JWVFfAzbDakOQofrIkkHWLqNA=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.70.4.tgz"
   "version" "0.70.4"

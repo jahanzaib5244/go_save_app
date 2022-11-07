@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps' // remove PROVIDER_GOOGLE import if not using Google Maps
-import { WebView } from 'react-native-webview'
 import { useSelector, useDispatch } from 'react-redux'
 import { styles } from './styles'
 import DropDownPicker from 'react-native-dropdown-picker'
@@ -9,7 +8,7 @@ import GetLocation from 'react-native-get-location'
 import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions'
 import { getAllUsers } from '../../Store/actions/auth.action'
 import NavStrings from '../../Containers/NavStrings'
-import auth from '@react-native-firebase/auth'
+import { onStart } from '../../Services/ForegroundService'
 
 const Home = ({ navigation }) => {
   const users = useSelector(state => state.AuthReducer.all_users)
@@ -29,6 +28,9 @@ const Home = ({ navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   useEffect(() => {
+    if (userdata?.type === 'driver') {
+      onStart()
+    }
     const filteredUsers = users?.filter(item => {
       const { lat, lon, type } = item
       if (lat && lon && type === 'driver') {

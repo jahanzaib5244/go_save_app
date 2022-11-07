@@ -1,5 +1,6 @@
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
+import { onStop } from '../../Services/ForegroundService'
 import { ALL_REQUEST, ALL_USERS, LOGIN, LOGOUT, USERDATA } from '../states'
 
 export const getUserData = () => async dispatch => {
@@ -28,6 +29,7 @@ export const getUserData = () => async dispatch => {
 export const logoutFireStore = tokens => async dispatch => {
   try {
     await auth().signOut()
+    await onStop()
     dispatch({
       type: LOGOUT,
       payload: {},
