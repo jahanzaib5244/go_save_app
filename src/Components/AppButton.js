@@ -1,11 +1,30 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native'
 import React from 'react'
 import { Colors } from '../Theme/Variables'
 
-const AppButton = ({ style = {}, title = '', onPress = () => {} }) => {
+const AppButton = ({
+  style = {},
+  title = '',
+  onPress = () => {},
+  loading = false,
+}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={{ ...styles.button, ...style }}>
-      <Text style={styles.buttonTxt}>{title}</Text>
+    <TouchableOpacity
+      disabled={loading}
+      onPress={onPress}
+      style={{ ...styles.button, ...style }}
+    >
+      {loading ? (
+        <ActivityIndicator color={Colors.white} size={20} />
+      ) : (
+        <Text style={styles.buttonTxt}>{title}</Text>
+      )}
     </TouchableOpacity>
   )
 }

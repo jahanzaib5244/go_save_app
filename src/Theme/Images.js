@@ -10,4 +10,5 @@ export default {
   id: require('@/Assets/Images/id-card.png'),
   logout: require('@/Assets/Images/logout.png'),
   home: require('@/Assets/Images/home.png'),
+  req: require('@/Assets/Images/req.png'),
 }

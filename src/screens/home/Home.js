@@ -1,86 +1,210 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps' // remove PROVIDER_GOOGLE import if not using Google Maps
 import { WebView } from 'react-native-webview'
 import { useSelector, useDispatch } from 'react-redux'
 import { styles } from './styles'
+import DropDownPicker from 'react-native-dropdown-picker'
+import GetLocation from 'react-native-get-location'
+import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions'
+import { getAllUsers } from '../../Store/actions/auth.action'
+import NavStrings from '../../Containers/NavStrings'
+import auth from '@react-native-firebase/auth'
 
-const Home = () => {
-  const users = useSelector(state => state?.MainReducer?.Allusers)
-  const userdata = useSelector(state => state?.MainReducer?.userData)
+const Home = ({ navigation }) => {
+  const users = useSelector(state => state.AuthReducer.all_users)
+  const dispatch = useDispatch()
+  const userdata = useSelector(state => state?.AuthReducer?.userData)
   const [displayUser, setdisplayUser] = useState([])
+  const [items, setItems] = useState([
+    { label: 'Chippa', value: 'Chippa' },
+    { label: 'Amaan', value: 'Amaan' },
+    { label: 'Edhi', value: 'Edhi' },
+  ])
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState(null)
 
   useEffect(() => {
-    // dispatch(fetchAllusers())
+    dispatch(getAllUsers())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   useEffect(() => {
     const filteredUsers = users?.filter(item => {
-      if (userdata?.role == 'farmer' && item?.role === 'doctor') {
+      const { lat, lon, type } = item
+      if (lat && lon && type === 'driver') {
         return item
-      } else {
-        if (userdata?.role == 'dealer' && item?.role === 'farmer') {
-          return item
-        } else {
-          if (userdata?.role == 'doctor' && item?.role === 'farmer') {
+      }
+    })
+    setdisplayUser(filteredUsers)
+  }, [userdata, users])
+
+  const gettigLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        setlat(location.latitude)
+        setlon(location.longitude)
+      })
+      .catch(error => {
+        const { code, message } = error
+        console.warn(code, message)
+      })
+  }
+
+  const requestLocation = async () => {
+    await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+    const granted = await permission_check()
+    if (granted) {
+      gettigLocation()
+    }
+  }
+
+  const getLocationFunn = async () => {
+    const checked = await permission_check()
+    if (checked) {
+      gettigLocation()
+    } else {
+      requestLocation()
+    }
+  }
+
+  useEffect(() => {
+    getLocationFunn()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    const filteredUsers = users?.filter(item => {
+      const { lat, lon, ambulance, type } = item
+      if (lat && lon && type === 'driver') {
+        if (value) {
+          if (ambulance === value) {
             return item
           }
+        } else {
+          return item
         }
       }
     })
     setdisplayUser(filteredUsers)
-  }, [userdata?.role, users])
+  }, [users, value])
+
+  const permission_check = async (status = false) => {
+    const result = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+
+    switch (result) {
+      case RESULTS.UNAVAILABLE:
+        status = false
+        console.log(
+          'This feature is not available (on this device / in this context)',
+        )
+        break
+      case RESULTS.DENIED:
+        status = false
+
+        console.log(
+          'The permission has not been requested / is denied but requestable',
+        )
+        break
+      case RESULTS.LIMITED:
+        status = false
+
+        console.log('The permission is limited: some actions are possible')
+        break
+      case RESULTS.GRANTED:
+        status = true
+        console.log('The permission is granted')
+        break
+      case RESULTS.BLOCKED:
+        status = false
+
+        console.log('The permission is denied and not requestable anymore')
+        break
+    }
+    return status
+  }
+  const [lat, setlat] = useState(null)
+  const [lon, setlon] = useState(null)
+
   return (
     <View style={{ flex: 1 }}>
-      <MapView
-        provider={PROVIDER_GOOGLE}
-        style={StyleSheet.absoluteFill}
-        region={{
-          latitude: 31.5204,
-          longitude: 74.3587,
-          latitudeDelta: 0.075,
-          longitudeDelta: 0.0121,
-        }}
-      >
-        {displayUser?.map((item, index) => {
-          if (item.lat !== '' && item.lon !== '') {
-            return (
-              <Marker
-                key={index}
-                coordinate={{ latitude: item.lat, longitude: item.lon }}
-                title={`${item.fullname.toUpperCase()}`}
-                description={`${item.address}`}
-              >
-                <Callout
-                  tooltip={true}
-                  // onPress={e =>
-                  //   navigation.navigate(NavStrings.userInformation, { item })
-                  // }
-                >
-                  <View>
-                    <View style={styles.bubble}>
-                      <View style={styles.textContaier}>
-                        <Text
-                          style={styles.name}
-                        >{`${item?.fullname.toUpperCase()}`}</Text>
-                        <Text style={styles.Mapadress}>{item.address}</Text>
-                        <Text style={styles.Mapadress}>{item.phone}</Text>
-                      </View>
-                      <View style={styles.ImageWrapper}>
-                        {/* <WebView
-                          style={{ height: 90, width: 90 }}
-                          source={{ uri: `${item.ImagePath}` }}
-                        /> */}
-                      </View>
-                    </View>
-                    <View style={styles.arrowBorder} />
-                    <View style={styles.arrow} />
-                  </View>
-                </Callout>
-              </Marker>
-            )
-          }
-        })}
-      </MapView>
+      {lat && lon ? (
+        <View style={{ flex: 1 }}>
+          <MapView
+            provider={PROVIDER_GOOGLE}
+            style={StyleSheet.absoluteFill}
+            pitchEnabled={true}
+            showsCompass={true}
+            liteMode={false}
+            showsBuildings={true}
+            showsTraffic={true}
+            showsIndoors={true}
+            region={{
+              latitude: lat,
+              longitude: lon,
+              latitudeDelta: 0.25,
+              longitudeDelta: 0.0121,
+            }}
+          >
+            {displayUser?.map((item, index) => {
+              const { last_name, first_name } = item
+              if ((item.lat, item.lon)) {
+                return (
+                  <Marker
+                    key={index}
+                    coordinate={{ latitude: item.lat, longitude: item.lon }}
+                    title={`${item?.ambulance}`}
+                    description={`${item?.email}`}
+                    onCalloutPress={() => {
+                      if (userdata?.type === 'user') {
+                        navigation.navigate(NavStrings.MarkerDetail, {
+                          item,
+                          lat,
+                          lon,
+                        })
+                      }
+                    }}
+                    image={{
+                      uri: 'https://firebasestorage.googleapis.com/v0/b/musafir-49f4d.appspot.com/o/1834905_100x100.png?alt=media&token=ee8b3167-9371-43e8-ae2b-b3fbfcc654b9',
+                    }}
+                  />
+                )
+              }
+            })}
+          </MapView>
+          <View
+            style={{
+              height: 50,
+              width: '87%',
+              // backgroundColor: 'white',
+              position: 'absolute',
+              top: 20,
+              alignSelf: 'center',
+            }}
+          >
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              style={styles.dropdown}
+              placeholder="Select an Ambulance..."
+            />
+          </View>
+        </View>
+      ) : (
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
+          <Text style={{ color: 'black', fontSize: 30 }}>
+            Map Could't Show it may case your location is not enable
+          </Text>
+        </View>
+      )}
     </View>
   )
 }

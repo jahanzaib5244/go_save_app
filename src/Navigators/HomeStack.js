@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import NavStrings from '../Containers/NavStrings'
-import { Home } from '../screens'
-import { useDispatch } from 'react-redux'
+import { Home, MarkerDetail, Requests } from '../screens'
+import { useDispatch, useSelector } from 'react-redux'
 import { getUserData } from '../Store/actions/auth.action'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import Drawercontent from './DrawerContennt'
@@ -13,7 +13,9 @@ const Drawer = createDrawerNavigator()
 
 const Stack = createStackNavigator()
 
-const HomeStack = () => {
+const Drawernavigation = () => {
+  const userdata = useSelector(state => state.AuthReducer.userData)
+
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getUserData())
@@ -57,7 +59,48 @@ const HomeStack = () => {
         name={NavStrings.Home}
         component={Home}
       />
+
+      <Drawer.Screen
+        options={{
+          drawerLabel: 'Requests',
+          headerTitle: 'Requests',
+          drawerIcon: ({ color, size }) => (
+            <Image
+              style={{ width: size, height: size, tintColor: color }}
+              source={Images.req}
+            />
+          ),
+        }}
+        name={NavStrings.Request}
+        component={Requests}
+      />
     </Drawer.Navigator>
+  )
+}
+
+const HomeStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name={NavStrings.HomeStack}
+        component={Drawernavigation}
+      />
+      <Stack.Screen
+        name={NavStrings.MarkerDetail}
+        component={MarkerDetail}
+        options={{
+          headerStyle: {
+            backgroundColor: Colors.theme,
+          },
+          headerTintColor: Colors.white,
+          animationEnabled: false,
+          headerShown: true,
+        }}
+      />
+    </Stack.Navigator>
   )
 }
 

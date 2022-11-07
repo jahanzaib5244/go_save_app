@@ -1,5 +1,5 @@
 import { View, Text, PermissionsAndroid } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { styles } from './styles'
 import Images from '../../Theme/Images'
 import AppInput from '../../Components/AppInput'
@@ -12,7 +12,7 @@ import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
 import DropDownPicker from 'react-native-dropdown-picker'
 import GetLocation from 'react-native-get-location'
-import { check, PERMISSIONS, RESULTS } from 'react-native-permissions'
+import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions'
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required().label('First Name'),
@@ -59,6 +59,7 @@ const Signup = ({ navigation, route }) => {
         console.log('The permission is denied and not requestable anymore')
         break
     }
+    return status
   }
 
   const [dbError, setdbError] = useState('')
@@ -80,6 +81,7 @@ const Signup = ({ navigation, route }) => {
       timeout: 15000,
     })
       .then(location => {
+        console.log(location)
         setlat(location.latitude)
         setlon(location.longitude)
       })
@@ -89,22 +91,27 @@ const Signup = ({ navigation, route }) => {
       })
   }
 
-  const requestLocatio = () => {
-    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(result => {
-      permission_check()
-    })
+  const requestLocation = async () => {
+    await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+    const granted = await permission_check()
+    if (granted) {
+      gettigLocation()
+    }
   }
 
   const getLocationFunn = async () => {
-    const checked = await check()
+    const checked = await permission_check()
+    console.log(checked)
     if (checked) {
       gettigLocation()
     } else {
+      requestLocation()
     }
   }
 
   useEffect(() => {
     getLocationFunn()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const type = route.params?.register
@@ -114,30 +121,65 @@ const Signup = ({ navigation, route }) => {
 
     try {
       setdbError('')
-
-      if (value && type === 'driver' && lat && lon) {
-        const create = await auth().createUserWithEmailAndPassword(
-          email,
-          password,
-        )
-        const res = await firestore()
-          .collection('users')
-          .doc(create.user.uid)
-          .set({
-            first_name: firstName,
-            last_name: lastName,
-            type,
-            cnic: cnic,
-            dob: '',
+      if (type === 'driver') {
+        if (value && lat && lon) {
+          const create = await auth().createUserWithEmailAndPassword(
             email,
-            pic: '',
-            disabled: false,
-          })
-        console.log(res)
-        setloading(false)
-      } else {
-        setloading(false)
-        setdbError('please select an ambulance')
+            password,
+          )
+          const res = await firestore()
+            .collection('users')
+            .doc(create.user.uid)
+            .set({
+              first_name: firstName,
+              last_name: lastName,
+              type,
+              cnic: cnic,
+              dob: '',
+              email,
+              pic: '',
+              disabled: false,
+              ambulance: value,
+              lat,
+              lon,
+            })
+          console.log(res)
+          setloading(false)
+        } else {
+          setloading(false)
+          setdbError(
+            'please select an ambulance or make sure you have location enable',
+          )
+        }
+      } else if (type === 'user') {
+        if (lat && lon) {
+          const create = await auth().createUserWithEmailAndPassword(
+            email,
+            password,
+          )
+          const res = await firestore()
+            .collection('users')
+            .doc(create.user.uid)
+            .set({
+              first_name: firstName,
+              last_name: lastName,
+              type,
+              cnic: cnic,
+              dob: '',
+              email,
+              pic: '',
+              disabled: false,
+              lat,
+              lon,
+            })
+          console.log(res)
+          setloading(false)
+        } else {
+          setloading(false)
+          setdbError(
+            'please select an ambulance or make sure you have location enable',
+          )
+        }
       }
     } catch (error) {
       console.log(error)

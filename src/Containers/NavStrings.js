@@ -6,4 +6,7 @@ export default {
   options: 'options',
   // Home stack navigation
   Home: 'Home',
+  Request: 'Request',
+  MarkerDetail: 'MarkerDetail',
+  HomeStack: 'HomeStack',
 }

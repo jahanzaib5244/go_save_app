@@ -1,6 +1,6 @@
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore'
-import { LOGIN, LOGOUT, USERDATA } from '../states'
+import { ALL_REQUEST, ALL_USERS, LOGIN, LOGOUT, USERDATA } from '../states'
 
 export const getUserData = () => async dispatch => {
   try {
@@ -35,6 +35,40 @@ export const logoutFireStore = tokens => async dispatch => {
   } catch (error) {
     console.log('logout action error', error)
   }
+}
+
+export const getAllUsers = () => async dispatch => {
+  firestore()
+    .collection('users')
+    .onSnapshot(snapshot => {
+      const users = []
+      if (!snapshot.empty) {
+        snapshot.forEach(documents => {
+          users.push({ ...documents.data(), uid: documents.id })
+        })
+      }
+      dispatch({
+        type: ALL_USERS,
+        payload: users,
+      })
+    })
+}
+
+export const getAllRequest = () => async dispatch => {
+  firestore()
+    .collection('request')
+    .onSnapshot(snapshot => {
+      const requests = []
+      if (!snapshot.empty) {
+        snapshot.forEach(documents => {
+          requests.push({ ...documents.data(), id: documents.id })
+        })
+      }
+      dispatch({
+        type: ALL_REQUEST,
+        payload: requests,
+      })
+    })
 }
 
 // export const updateProfileFirestore =
