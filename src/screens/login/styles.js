@@ -50,4 +50,8 @@ export const styles = StyleSheet.create({
     marginRight: '5%',
     marginTop: 10,
   },
+  error: {
+    color: Colors.error,
+    paddingHorizontal: '6%',
+  },
 })

@@ -1,5 +1,5 @@
 import { View, Image, Text } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { styles } from './styles'
 import Images from '../../Theme/Images'
 import AppInput from '../../Components/AppInput'
@@ -17,13 +17,20 @@ const validationSchema = Yup.object().shape({
 })
 
 const Login = ({ navigation }) => {
+  const [loading, setloading] = useState(false)
+  const [dberror, setdberror] = useState('')
+
   const handelLogin = async values => {
+    setdberror('')
+    setloading(true)
     const { email, password } = values
     try {
-      const res = await auth().signInWithEmailAndPassword(email, password)
-      console.log(res)
+      await auth().signInWithEmailAndPassword(email, password)
+      setloading(false)
     } catch (error) {
       console.log(error)
+      setloading(false)
+      setdberror(error?.message)
     }
   }
 
@@ -76,8 +83,13 @@ const Login = ({ navigation }) => {
                 >
                   <Text style={styles.signup}>Forget Password ?</Text>
                 </TouchableOpacity>
+                {dberror !== '' && <Text style={styles.error}>{dberror}</Text>}
                 <View style={styles.btn}>
-                  <AppButton title="Login" onPress={handleSubmit} />
+                  <AppButton
+                    loading={loading}
+                    title="Login"
+                    onPress={handleSubmit}
+                  />
                 </View>
               </>
             )}

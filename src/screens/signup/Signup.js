@@ -200,7 +200,7 @@ const Signup = ({ navigation, route }) => {
               setValue={setValue}
               setItems={setItems}
               style={styles.dropdown}
-              placeholder="Select an Ambulance..."
+              placeholder="Select an orgaizatio..."
             />
           )}
           <Formik

@@ -1,7 +1,14 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import NavStrings from '../Containers/NavStrings'
-import { Home, MarkerDetail, Requests, Map, Payments } from '../screens'
+import {
+  Home,
+  MarkerDetail,
+  Requests,
+  Map,
+  Payments,
+  GetPayments,
+} from '../screens'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserData } from '../Store/actions/auth.action'
 import { createDrawerNavigator } from '@react-navigation/drawer'
@@ -74,6 +81,22 @@ const Drawernavigation = () => {
         name={NavStrings.Request}
         component={Requests}
       />
+      {userdata?.type === 'user' && (
+        <Drawer.Screen
+          options={{
+            drawerLabel: 'Donation',
+            headerTitle: 'Payments Mathods',
+            drawerIcon: ({ color, size }) => (
+              <Image
+                style={{ width: size, height: size, tintColor: color }}
+                source={Images.donation}
+              />
+            ),
+          }}
+          name={NavStrings.Payments}
+          component={Payments}
+        />
+      )}
     </Drawer.Navigator>
   )
 }
@@ -115,6 +138,18 @@ const HomeStack = () => {
       <Stack.Screen
         name={NavStrings.Payments}
         component={Payments}
+        options={{
+          headerStyle: {
+            backgroundColor: Colors.theme,
+          },
+          headerTintColor: Colors.white,
+          animationEnabled: false,
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name={NavStrings.GetPayments}
+        component={GetPayments}
         options={{
           headerStyle: {
             backgroundColor: Colors.theme,

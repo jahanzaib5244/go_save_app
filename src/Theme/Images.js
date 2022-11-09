@@ -11,4 +11,13 @@ export default {
   logout: require('@/Assets/Images/logout.png'),
   home: require('@/Assets/Images/home.png'),
   req: require('@/Assets/Images/req.png'),
+  jazz: require('@/Assets/Images/jazz.jpg'),
+  easypaisa: require('@/Assets/Images/easypaisa.png'),
+  card: require('@/Assets/Images/card.png'),
+  paypal: require('@/Assets/Images/pay.png'),
+  phone: require('@/Assets/Images/phone.png'),
+  bank: require('@/Assets/Images/bank.png'),
+  cvc: require('@/Assets/Images/cvc.png'),
+  money: require('@/Assets/Images/money.png'),
+  donation: require('@/Assets/Images/heart.png'),
 }

@@ -11,8 +11,6 @@ export const getUserData = () => async dispatch => {
       .collection('users')
       .doc(uid)
       .onSnapshot(async snapshot => {
-        snapshot.data()
-        console.log(snapshot.data())
         if (snapshot.data()) {
           dispatch({
             type: USERDATA,

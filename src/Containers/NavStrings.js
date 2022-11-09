@@ -11,4 +11,5 @@ export default {
   HomeStack: 'HomeStack',
   Map: 'Map',
   Payments: 'Payments',
+  GetPayments: 'GetPayments',
 }

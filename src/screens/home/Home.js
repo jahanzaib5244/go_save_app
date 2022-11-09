@@ -179,51 +179,36 @@ const Home = ({ navigation }) => {
               }
             })}
           </MapView>
-          <View
-            style={{
-              height: 50,
-              width: '90%',
-              top: 20,
-              alignSelf: 'center',
-              flexDirection: 'row',
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <DropDownPicker
-                open={open}
-                value={value}
-                items={items}
-                setOpen={setOpen}
-                setValue={setValue}
-                setItems={setItems}
-                // style={{ width: '70%', backgroundColor: 'green' }}
-                placeholder="Select an Ambulance..."
-              />
-            </View>
-            <View style={{ width: 10 }} />
-            <TouchableOpacity
-              onPress={() => navigation.navigate(NavStrings.Payments)}
+          {userdata?.type === 'user' && (
+            <View
               style={{
-                paddingHorizontal: 15,
-                backgroundColor: Colors.theme,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 10,
+                height: 50,
+                width: '90%',
+                top: 20,
+                alignSelf: 'center',
+                flexDirection: 'row',
               }}
             >
-              <Text
-                style={{ fontSize: 15, fontWeight: '700', color: Colors.white }}
-              >
-                Donation
-              </Text>
-            </TouchableOpacity>
-          </View>
+              <View style={{ flex: 1 }}>
+                <DropDownPicker
+                  open={open}
+                  value={value}
+                  items={items}
+                  setOpen={setOpen}
+                  setValue={setValue}
+                  setItems={setItems}
+                  // style={{ width: '70%', backgroundColor: 'green' }}
+                  placeholder="Select an organization..."
+                />
+              </View>
+            </View>
+          )}
         </View>
       ) : (
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
-          <Text style={{ color: 'black', fontSize: 30 }}>
+          <Text style={{ color: 'black', fontSize: 18 }}>
             Map Could't Show it may case your location is not enable
           </Text>
         </View>
