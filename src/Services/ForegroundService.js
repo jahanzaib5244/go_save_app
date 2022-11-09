@@ -1,9 +1,8 @@
 import ReactNativeForegroundService from '@supersami/rn-foreground-service'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import auth from '@react-native-firebase/auth'
 
-import GetLocation from 'react-native-get-location'
 import firestore from '@react-native-firebase/firestore'
+import Geolocation from 'react-native-geolocation-service'
 
 export const onStart = () => {
   // Checking if the task i am going to create already exist and running, which means that the foreground is also running.
@@ -12,17 +11,23 @@ export const onStart = () => {
   ReactNativeForegroundService.add_task(
     async () => {
       const uid = auth().currentUser?.uid
-      console.log(uid)
-      const { latitude, longitude } = await GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 15000,
-      })
       if (uid) {
-        const res = await firestore().collection('users').doc(uid).update({
-          lat: latitude,
-          lon: longitude,
-        })
-        console.log(res)
+        Geolocation.getCurrentPosition(
+          async position => {
+            const { latitude, longitude } = position.coords
+            await firestore().collection('users').doc(uid).update({
+              lat: latitude,
+              lon: longitude,
+            })
+          },
+          error => {
+            // See error code charts below.
+            console.log(error.code, error.message)
+          },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+        )
+      } else {
+        onStop()
       }
     },
 
@@ -37,7 +42,7 @@ export const onStart = () => {
   return ReactNativeForegroundService.start({
     id: 144,
     title: 'Location Service',
-    message: "please don't turn off your internet and locatio",
+    message: "please don't turn off your internet and location",
   })
 }
 

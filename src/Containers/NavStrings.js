@@ -9,4 +9,6 @@ export default {
   Request: 'Request',
   MarkerDetail: 'MarkerDetail',
   HomeStack: 'HomeStack',
+  Map: 'Map',
+  Payments: 'Payments',
 }

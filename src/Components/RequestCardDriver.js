@@ -12,9 +12,12 @@ import { Images } from '../Theme'
 import { useSelector } from 'react-redux'
 import firestore from '@react-native-firebase/firestore'
 import moment from 'moment'
+import NavStrings from '../Containers/NavStrings'
+import { useNavigation } from '@react-navigation/native'
 
 const RequestCardDriver = ({ item = {} }) => {
   const all_users = useSelector(state => state.AuthReducer.all_users)
+  const navigation = useNavigation()
   const [user, setuser] = useState({})
   const [driver, setdriver] = useState({})
 
@@ -63,8 +66,12 @@ const RequestCardDriver = ({ item = {} }) => {
             <Text style={styles.txt}>{moment(item?.time).fromNow()}</Text>
           </View>
           <TouchableOpacity
-            onPress={async () => {
-              await Linking.openURL(`geo:${item.lat},${item.lon}`)
+            onPress={() => {
+              if (item?.status === 'pending' || item?.status === 'rejected') {
+                return
+              } else {
+                navigation.navigate(NavStrings.Map, { uid: item?.requested_by })
+              }
             }}
             style={{ flexDirection: 'row' }}
           >

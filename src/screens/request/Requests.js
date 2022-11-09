@@ -11,7 +11,6 @@ const Requests = () => {
   const userdata = useSelector(state => state.AuthReducer.userData)
   const [requests, setrequests] = useState([])
 
-  console.log(all_requests)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -23,7 +22,6 @@ const Requests = () => {
     if (userdata?.type === 'user') {
       setrequests(
         all_requests.filter(item => {
-          console.log(uid === item.requested_by, uid, item.requested_by)
           if (uid === item.requested_by) {
             return item
           }
@@ -39,7 +37,6 @@ const Requests = () => {
       )
     }
   }, [all_requests, userdata?.type])
-  console.log(requests.length)
   return (
     <View style={{ flex: 1 }}>
       <FlatList

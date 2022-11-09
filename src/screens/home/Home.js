@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps' // remove PROVIDER_GOOGLE import if not using Google Maps
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps' // remove PROVIDER_GOOGLE import if not using Google Maps
 import { useSelector, useDispatch } from 'react-redux'
 import { styles } from './styles'
 import DropDownPicker from 'react-native-dropdown-picker'
@@ -9,6 +9,8 @@ import { check, PERMISSIONS, RESULTS, request } from 'react-native-permissions'
 import { getAllUsers } from '../../Store/actions/auth.action'
 import NavStrings from '../../Containers/NavStrings'
 import { onStart } from '../../Services/ForegroundService'
+import ReactNativeForegroundService from '@supersami/rn-foreground-service'
+import { Colors } from '../../Theme/Variables'
 
 const Home = ({ navigation }) => {
   const users = useSelector(state => state.AuthReducer.all_users)
@@ -28,9 +30,6 @@ const Home = ({ navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   useEffect(() => {
-    if (userdata?.type === 'driver') {
-      onStart()
-    }
     const filteredUsers = users?.filter(item => {
       const { lat, lon, type } = item
       if (lat && lon && type === 'driver') {
@@ -38,6 +37,11 @@ const Home = ({ navigation }) => {
       }
     })
     setdisplayUser(filteredUsers)
+    setTimeout(() => {
+      if (!ReactNativeForegroundService.is_task_running('taskid')) {
+        onStart()
+      }
+    }, 10000)
   }, [userdata, users])
 
   const gettigLocation = () => {
@@ -50,8 +54,7 @@ const Home = ({ navigation }) => {
         setlon(location.longitude)
       })
       .catch(error => {
-        const { code, message } = error
-        console.warn(code, message)
+        gettigLocation()
       })
   }
 
@@ -179,23 +182,41 @@ const Home = ({ navigation }) => {
           <View
             style={{
               height: 50,
-              width: '87%',
-              // backgroundColor: 'white',
-              position: 'absolute',
+              width: '90%',
               top: 20,
               alignSelf: 'center',
+              flexDirection: 'row',
             }}
           >
-            <DropDownPicker
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              style={styles.dropdown}
-              placeholder="Select an Ambulance..."
-            />
+            <View style={{ flex: 1 }}>
+              <DropDownPicker
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setValue}
+                setItems={setItems}
+                // style={{ width: '70%', backgroundColor: 'green' }}
+                placeholder="Select an Ambulance..."
+              />
+            </View>
+            <View style={{ width: 10 }} />
+            <TouchableOpacity
+              onPress={() => navigation.navigate(NavStrings.Payments)}
+              style={{
+                paddingHorizontal: 15,
+                backgroundColor: Colors.theme,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 10,
+              }}
+            >
+              <Text
+                style={{ fontSize: 15, fontWeight: '700', color: Colors.white }}
+              >
+                Donation
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       ) : (

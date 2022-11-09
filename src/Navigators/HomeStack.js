@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import NavStrings from '../Containers/NavStrings'
-import { Home, MarkerDetail, Requests } from '../screens'
+import { Home, MarkerDetail, Requests, Map, Payments } from '../screens'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserData } from '../Store/actions/auth.action'
 import { createDrawerNavigator } from '@react-navigation/drawer'
@@ -91,6 +91,30 @@ const HomeStack = () => {
       <Stack.Screen
         name={NavStrings.MarkerDetail}
         component={MarkerDetail}
+        options={{
+          headerStyle: {
+            backgroundColor: Colors.theme,
+          },
+          headerTintColor: Colors.white,
+          animationEnabled: false,
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name={NavStrings.Map}
+        component={Map}
+        options={{
+          headerStyle: {
+            backgroundColor: Colors.theme,
+          },
+          headerTintColor: Colors.white,
+          animationEnabled: false,
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name={NavStrings.Payments}
+        component={Payments}
         options={{
           headerStyle: {
             backgroundColor: Colors.theme,

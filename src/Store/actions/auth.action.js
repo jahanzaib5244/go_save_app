@@ -28,8 +28,8 @@ export const getUserData = () => async dispatch => {
 
 export const logoutFireStore = tokens => async dispatch => {
   try {
+    onStop()
     await auth().signOut()
-    await onStop()
     dispatch({
       type: LOGOUT,
       payload: {},
