@@ -144,6 +144,10 @@ const Signup = ({ navigation, route }) => {
               lon,
             })
           console.log(res)
+          auth().currentUser.sendEmailVerification({
+            handleCodeInApp: true,
+            url: 'app/email-verification',
+          })
           setloading(false)
         } else {
           setloading(false)

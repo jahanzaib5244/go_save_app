@@ -1,5 +1,5 @@
 export default {
-  logo: require('@/Assets/Images/logo.jpeg'),
+  logo: require('@/Assets/Images/logo.png'),
   email: require('@/Assets/Images/email.png'),
   lock: require('@/Assets/Images/lock.png'),
   show: require('@/Assets/Images/invisible.png'),
@@ -20,4 +20,9 @@ export default {
   cvc: require('@/Assets/Images/cvc.png'),
   money: require('@/Assets/Images/money.png'),
   donation: require('@/Assets/Images/heart.png'),
+  donate: require('@/Assets/Images/donate.png'),
+  ambulance: require('@/Assets/Images/ambulance.png'),
+  vector1: require('@/Assets/Images/vector1.png'),
+  vector2: require('@/Assets/Images/vector2.png'),
+  verify: require('@/Assets/Images/verify.png'),
 }

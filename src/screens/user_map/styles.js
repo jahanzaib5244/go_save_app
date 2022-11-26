@@ -1,10 +1,15 @@
-import { StyleSheet, Platform, Dimensions } from 'react-native'
-
-const { height, width } = Dimensions.get('window')
+import { StyleSheet, Platform } from 'react-native'
 
 export const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
+  },
+  DropDownPicker: {
+    height: 50,
+    width: '90%',
+    top: 20,
+    alignSelf: 'center',
+    flexDirection: 'row',
   },
   searchBox: {
     position: 'absolute',
@@ -29,24 +34,6 @@ export const styles = StyleSheet.create({
   chipsIcon: {
     marginRight: 5,
   },
-  upper_image_container: {
-    position: 'absolute',
-    top: 0,
-  },
-  logo: {
-    height: height * 0.3,
-    resizeMode: 'contain',
-    alignSelf: 'center',
-    top: height * 0.1,
-  },
-  lower_image_container: {
-    position: 'absolute',
-    bottom: 0,
-  },
-  vector_image: {
-    width: width,
-    height: height * 0.1,
-  },
   chipsItem: {
     flexDirection: 'row',
     backgroundColor: '#fff',
@@ -56,10 +43,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: 10,
     height: 35,
     shadowColor: '#ccc',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 10,
@@ -120,23 +104,26 @@ export const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    backgroundColor: 'white',
-    height: height * 0.15,
-    width: width * 0.42,
-    elevation: 10,
-    borderRadius: height * 0.02,
-  },
-  button_container: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    bottom: height * 0.2,
-  },
-
-  button_image: {
-    height: height * 0.08,
-    width: width * 0.2,
     marginTop: 5,
-    resizeMode: 'contain',
   },
-  button_txt: { color: 'rgba(219,70,72,1)', fontWeight: 'bold', top: 6 },
+  signIn: {
+    width: '100%',
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 3,
+  },
+  textSign: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  no_map_txt: {
+    color: 'black',
+    fontSize: 18,
+  },
+  txt_container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 })

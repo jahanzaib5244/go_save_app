@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps' // remove PROVIDER_GOOGLE import if not using Google Maps
 import { useSelector, useDispatch } from 'react-redux'
@@ -11,10 +11,8 @@ import { getAllUsers } from '../../Store/actions/auth.action'
 import NavStrings from '../../Containers/NavStrings'
 import { onStart } from '../../Services/ForegroundService'
 import ReactNativeForegroundService from '@supersami/rn-foreground-service'
-import { Colors } from '../../Theme/Variables'
-import Images from '../../Theme/Images'
 
-const Home = ({ navigation }) => {
+export default function User_map({ navigation }) {
   const users = useSelector(state => state.AuthReducer.all_users)
   const dispatch = useDispatch()
   const userdata = useSelector(state => state?.AuthReducer?.userData)
@@ -136,52 +134,74 @@ const Home = ({ navigation }) => {
   const [lon, setlon] = useState(null)
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'space-between',
-        backgroundColor: 'white',
-      }}
-    >
-      <View style={styles.upper_image_container}>
-        <Image source={Images.vector2} style={styles.vector_image} />
-      </View>
-      <View style={styles.lower_image_container}>
-        <Image source={Images.vector1} style={styles.vector_image} />
-      </View>
-      <View>
-        <Image source={Images.logo} style={styles.logo} />
-      </View>
-      {userdata?.type === 'user' ? (
-        <View style={styles.button_container}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate(NavStrings.user_map)}
+    <View style={{ flex: 1 }}>
+      {lat && lon ? (
+        <View style={{ flex: 1 }}>
+          <MapView
+            provider={PROVIDER_GOOGLE}
+            style={StyleSheet.absoluteFill}
+            pitchEnabled={true}
+            showsCompass={true}
+            liteMode={false}
+            showsBuildings={true}
+            showsTraffic={true}
+            showsIndoors={true}
+            region={{
+              latitude: lat,
+              longitude: lon,
+              latitudeDelta: 0.25,
+              longitudeDelta: 0.0121,
+            }}
           >
-            <Image style={styles.button_image} source={Images.ambulance} />
-            <Text style={styles.button_txt}>Book an Ambulance</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate(NavStrings.Payments)}
-          >
-            <Image style={styles.button_image} source={Images.donate} />
-            <Text style={styles.button_txt}>Donation</Text>
-          </TouchableOpacity>
+            {displayUser?.map((item, index) => {
+              if ((item.lat, item.lon)) {
+                return (
+                  <Marker
+                    key={index}
+                    coordinate={{ latitude: item.lat, longitude: item.lon }}
+                    title={`${item?.ambulance}`}
+                    description={`${item?.email}`}
+                    onCalloutPress={() => {
+                      if (userdata?.type === 'user') {
+                        navigation.navigate(NavStrings.MarkerDetail, {
+                          item,
+                          lat,
+                          lon,
+                        })
+                      }
+                    }}
+                    image={{
+                      uri: 'https://firebasestorage.googleapis.com/v0/b/musafir-49f4d.appspot.com/o/1834905_100x100.png?alt=media&token=ee8b3167-9371-43e8-ae2b-b3fbfcc654b9',
+                    }}
+                  />
+                )
+              }
+            })}
+          </MapView>
+          {userdata?.type === 'user' && (
+            <View style={styles.DropDownPicker}>
+              <View style={{ flex: 1 }}>
+                <DropDownPicker
+                  open={open}
+                  value={value}
+                  items={items}
+                  setOpen={setOpen}
+                  setValue={setValue}
+                  setItems={setItems}
+                  // style={{ width: '70%', backgroundColor: 'green' }}
+                  placeholder="Select an organization..."
+                />
+              </View>
+            </View>
+          )}
         </View>
       ) : (
-        <View style={styles.button_container}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate(NavStrings.Request)}
-          >
-            <Image style={styles.button_image} source={Images.ambulance} />
-            <Text style={styles.button_txt}>Request</Text>
-          </TouchableOpacity>
+        <View style={styles.txt_container}>
+          <Text style={styles.no_map_txt}>
+            Map Could't Show it may case your location is not enable
+          </Text>
         </View>
       )}
     </View>
   )
 }
-
-export default Home

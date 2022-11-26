@@ -8,6 +8,7 @@ import {
   Map,
   Payments,
   GetPayments,
+  User_map,
 } from '../screens'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUserData } from '../Store/actions/auth.action'
@@ -150,6 +151,18 @@ const HomeStack = () => {
       <Stack.Screen
         name={NavStrings.GetPayments}
         component={GetPayments}
+        options={{
+          headerStyle: {
+            backgroundColor: Colors.theme,
+          },
+          headerTintColor: Colors.white,
+          animationEnabled: false,
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name={NavStrings.user_map}
+        component={User_map}
         options={{
           headerStyle: {
             backgroundColor: Colors.theme,

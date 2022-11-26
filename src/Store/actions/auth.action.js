@@ -24,7 +24,7 @@ export const getUserData = () => async dispatch => {
   }
 }
 
-export const logoutFireStore = tokens => async dispatch => {
+export const logoutFireStore = () => async dispatch => {
   try {
     onStop()
     await auth().signOut()

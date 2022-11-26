@@ -12,4 +12,5 @@ export default {
   Map: 'Map',
   Payments: 'Payments',
   GetPayments: 'GetPayments',
+  user_map: 'user_map',
 }
